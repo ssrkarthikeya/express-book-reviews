@@ -115,6 +115,23 @@ public_users.get("/book/review/:isbn", function (req, res) {
   } else return res.status(200).json({ message: "Book not found" });
 });
 
+// Get book details based on author
+public_users.get("book/author/:author", function (req, res) {
+  var listOfBooks = [];
+
+  for (let [key, value] of Object.entries(books)) {
+    if (value.author.includes(req.params.author)) {
+      listOfBooks.push(value);
+    }
+  }
+  if (listOfBooks.length > 0) {
+    const getReview = new Promise((resolve, reject) => {
+      resolve(res.status(200).json(listOfBooks));
+    });
+    getReview.then(() => console.log("Complete"));
+  } else return res.status(200).json({ message: "No books found" });
+});
+
 const doesExist = (username) => {
   let userswithsamename = users.filter((user) => {
     return user.username === username;
